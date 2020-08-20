@@ -13,23 +13,26 @@ const Questions = ({
   const [answer, setAnswer] = useState(options);
   return (
     <Container>
-      <Form.Group as={Row}>
-        <Form.Label className={`${hasError ? "error" : ""}`} as="legend">
+      <Form.Group>
+        <Form.Label className={`${hasError ? "error" : ""}`} column as="legend">
           {question}
         </Form.Label>
 
-        {answer.map((text, index) => (
-          <Form.Check
-            type="radio"
-            label={text}
-            name={text}
-            id={index}
-            checked={answerObject[id] === text}
-            onChange={() => {
-              selected(text, id);
-            }}
-          />
-        ))}
+        <Col>
+          {answer.map((text, index) => (
+            <Form.Check
+              type="radio"
+              label={text}
+              name={text}
+              id={index}
+              key={index}
+              checked={answerObject[id] === text}
+              onChange={() => {
+                selected(text, id);
+              }}
+            />
+          ))}
+        </Col>
       </Form.Group>
       <br></br>
     </Container>

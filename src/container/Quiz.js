@@ -57,7 +57,7 @@ export default class Quiz extends Component {
   };
 
   handleSubmit = () => {
-    if (Object.values(this.state.answerObject).every((a) => a != "")) {
+    if (Object.values(this.state.answerObject).every((a) => a !== "")) {
       let scoreCount = 0;
       for (let i = 0; i < this.state.questionBank.length; i++) {
         if (
@@ -74,7 +74,7 @@ export default class Quiz extends Component {
     } else {
       const errorObj = {};
       Object.keys(this.state.answerObject).forEach((a) => {
-        this.state.answerObject[a] == ""
+        this.state.answerObject[a] === ""
           ? (errorObj[a] = true)
           : (errorObj[a] = false);
       });
@@ -93,38 +93,41 @@ export default class Quiz extends Component {
   }
 
   render() {
+    const { showResult, questionBank, score, answerObject, error } = this.state;
     return (
       <Container>
+        <Row className="justify-center">
+          <h3> Quiz </h3>
+        </Row>
         <Row>
-          <h5> Quiz </h5>
-          <Form>
-            {this.state.questionBank.length > 0 &&
-              this.state.responses < 5 &&
-              this.state.questionBank.map((q, index) => (
-                <Questions
-                  question={q.question}
-                  options={q.answers}
-                  id={q.id}
-                  key={q.id}
-                  selected={this.computeAnswer}
-                  answerObject={this.state.answerObject}
-                  hasError={this.state.error[q.id]}
-                />
-              ))}
-            <Button onClick={() => this.handleSubmit()}>Submit</Button>
-            <Button
-              className="m-2"
-              variant="success"
-              onClick={() => this.clearAll()}
-            >
-              Clear
-            </Button>
-          </Form>
-
-          {this.state.showResult && (
+          {!showResult && (
+            <Form>
+              {questionBank.length > 0 &&
+                questionBank.map((q) => (
+                  <Questions
+                    question={q.question}
+                    options={q.answers}
+                    id={q.id}
+                    key={q.id}
+                    selected={this.computeAnswer}
+                    answerObject={answerObject}
+                    hasError={error[q.id]}
+                  />
+                ))}
+              <Button onClick={() => this.handleSubmit()}>Submit</Button>
+              <Button
+                className="m-2"
+                variant="success"
+                onClick={() => this.clearAll()}
+              >
+                Clear
+              </Button>
+            </Form>
+          )}
+          {showResult && (
             <Result
-              score={this.state.score}
-              total={this.state.questionBank.length}
+              score={score}
+              total={questionBank.length}
               playAgain={this.playAgain}
             />
           )}
